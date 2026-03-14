@@ -2,99 +2,71 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Cryzon Pro</title>
+<title>Cryzon</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-/* ---------------- GENERAL ---------------- */
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
   background:#0f172a;
   color:white;
   text-align:center;
-  overflow-x:hidden;
 }
-a{text-decoration:none;color:white;}
-button{cursor:pointer;border:none;border-radius:6px;transition:0.2s;}
-button:hover{transform:scale(1.05);}
 .hidden{display:none;}
-
-/* ---------------- MENU ---------------- */
 .menuIcon{
   position:fixed; top:15px; left:20px; font-size:28px; cursor:pointer; z-index:999;
 }
 .sidebar{
-  position:fixed; top:0; left:-280px; width:280px; height:100%; background:#020617; padding-top:70px;
-  transition:0.3s; z-index:998;
+  position:fixed; top:0; left:-250px; width:250px; height:100%; background:#020617; padding-top:70px; transition:0.3s; z-index:998;
 }
-.sidebar a{
-  display:block; padding:18px; font-size:18px;
-}
+.sidebar a{display:block; padding:18px; font-size:18px;}
 .sidebar a:hover{background:#111827;}
-
-/* ---------------- CARDS ---------------- */
-.card{
-  background:#020617; padding:25px; border-radius:15px; width:380px; margin:90px auto;
-  box-shadow:0 0 25px rgba(0,0,0,0.7);
-}
-input{
-  width:90%; padding:10px; margin:8px 0; border:none; border-radius:6px; background:#111827; color:white;
-}
-
-/* ---------------- BUTTONS ---------------- */
-.mainBtn{padding:12px 25px; background:#2563eb; color:white; font-weight:600;}
-.gameBtn{display:block;margin:12px auto;width:250px; padding:12px 0;background:#2563eb;}
-
-/* ---------------- BALANCE ---------------- */
+.siteTitle{font-size:32px; margin-top:20px; font-weight:700;}
 .balanceBox{
   background:black; color:#22c55e; width:150px; margin:20px auto;
-  padding:16px; border-radius:20px; font-size:26px; text-align:center;
-  box-shadow:0 0 20px #22c55e; cursor:pointer;
-  animation:none;
+  padding:16px; border-radius:20px; font-size:26px; cursor:pointer; animation:none;
 }
-.balanceBox.winAnim{
-  animation: pop 0.4s;
+.balanceBox.winAnim{animation: pop 0.4s;}
+@keyframes pop{0%{transform:scale(1);}50%{transform:scale(1.3);}100%{transform:scale(1);}}
+.gamesGrid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:20px;
+  max-width:720px;
+  margin:20px auto;
 }
-.bigMoney{
-  font-size:90px; color:#22c55e; margin-top:100px; text-shadow:0 0 25px #22c55e; text-align:center;
+.gameCard{
+  background:#1e293b; /* dark blue rectangle */
+  border-radius:12px;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+  min-height:120px;
 }
-.withdrawBtn{margin-top:40px; padding:16px 40px; font-size:20px; display:block; margin-left:auto; margin-right:auto;}
-
-/* ---------------- ANIMATIONS ---------------- */
-@keyframes pop{
-0%{transform:scale(1);}
-50%{transform:scale(1.3);}
-100%{transform:scale(1);}
+.gameText{
+  font-size:18px;
+  margin-bottom:10px;
 }
-
-/* ---------------- TERMS ---------------- */
-.termsText{width:85%; max-width:700px; margin:auto; text-align:left; line-height:1.7; margin-top:40px;}
-.virtualNote{margin-top:50px; font-size:13px; color:#9ca3af; text-align:center;}
-
-/* ---------------- SITE TITLE ---------------- */
-.siteTitle{font-size:32px; text-align:center; font-weight:700; margin-top:20px;}
-
-/* ---------------- SLOT MACHINE ---------------- */
-.slotContainer{
-  display:flex; justify-content:center; margin-top:20px;
-}
-.slotItem{
-  width:50px; height:50px; background:#111827; margin:0 5px; border-radius:8px;
-  display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 0 10px #000;
+.playButton{
+  background:#22c55e;
+  color:white;
+  border:none;
+  border-radius:0 0 12px 12px;
+  width:100%;
+  padding:10px 0;
+  cursor:pointer;
+  font-weight:600;
   transition:0.2s;
 }
-
-/* ---------------- WHEEL ---------------- */
-#wheelCanvas{
-  margin-top:20px;
-  background:#111827;
-  border-radius:50%;
-}
+.playButton:hover{background:#16a34a;}
+.termsText{width:85%; max-width:700px; margin:auto; text-align:left; line-height:1.7; margin-top:40px;}
+.virtualNote{margin-top:50px; font-size:13px; color:#9ca3af; text-align:center;}
 </style>
 </head>
 <body>
 
-<!-- MENU -->
 <div class="menuIcon" onclick="toggleMenu()">☰</div>
 <div id="sidebar" class="sidebar">
   <a href="#" onclick="showHome()">Home</a>
@@ -104,75 +76,99 @@ input{
 
 <div class="siteTitle">Cryzon</div>
 
-<!-- SIGNUP PAGE -->
-<div id="signup" class="card">
+<!-- SIGNUP -->
+<div id="signup" class="hidden">
   <h2>Create Account</h2>
   <input type="email" id="email" placeholder="Email"><br>
   <input type="password" id="password" placeholder="Password"><br>
   <input type="text" id="bonus" placeholder="Bonus Code (optional)"><br>
-  <button class="mainBtn" onclick="createAccount()">Create Account</button>
+  <button onclick="createAccount()">Create Account</button>
 </div>
 
 <!-- HOME PAGE -->
-<div id="games" class="hidden card">
+<div id="games" class="hidden">
   <div class="balanceBox" id="balanceBox" onclick="showMoney()">
     <span id="balance">0$</span>
   </div>
-  <h2>Games</h2>
-  <button class="gameBtn" onclick="startSlot()">Slot Machine</button>
-  <button class="gameBtn" onclick="diceGame()">Dice Roll</button>
-  <button class="gameBtn" onclick="wheelGame()">Lucky Wheel</button>
-  <button class="gameBtn" onclick="coinFlip()">Coin Flip</button>
-  <button class="gameBtn" onclick="pickNumber()">Pick a Number</button>
-  <button class="gameBtn" onclick="highLowGame()">High or Low</button>
-  <button class="gameBtn" onclick="cardGuess()">Card Guess</button>
-  <button class="gameBtn" onclick="numberRace()">Number Race</button>
-  <button class="gameBtn" onclick="quickPick()">Quick Pick</button>
-  <button class="gameBtn" onclick="doubleRoll()">Double Roll</button>
+
+  <!-- 1ère ligne -->
+  <div class="gamesGrid">
+    <div class="gameCard">
+      <div class="gameText">🎰 Slot Machine</div>
+      <button class="playButton" onclick="slotGame()">Play</button>
+    </div>
+    <div class="gameCard">
+      <div class="gameText">🎲 Dice Roll</div>
+      <button class="playButton" onclick="diceGame()">Play</button>
+    </div>
+    <div class="gameCard">
+      <div class="gameText">🎡 Lucky Wheel</div>
+      <button class="playButton" onclick="wheelGame()">Play</button>
+    </div>
+  </div>
+  <!-- 2ème ligne -->
+  <div class="gamesGrid">
+    <div class="gameCard">
+      <div class="gameText">🪙 Coin Flip</div>
+      <button class="playButton" onclick="coinFlip()">Play</button>
+    </div>
+    <div class="gameCard">
+      <div class="gameText">🔢 Pick a Number</div>
+      <button class="playButton" onclick="pickNumber()">Play</button>
+    </div>
+    <div class="gameCard">
+      <div class="gameText">⬆️⬇️ High or Low</div>
+      <button class="playButton" onclick="highLowGame()">Play</button>
+    </div>
+  </div>
+  <!-- 3ème ligne -->
+  <div class="gamesGrid">
+    <div class="gameCard">
+      <div class="gameText">🃏 Card Guess</div>
+      <button class="playButton" onclick="cardGuess()">Play</button>
+    </div>
+    <div class="gameCard">
+      <div class="gameText">🏁 Number Race</div>
+      <button class="playButton" onclick="numberRace()">Play</button>
+    </div>
+    <div class="gameCard">
+      <div class="gameText">🎯 Quick Pick</div>
+      <button class="playButton" onclick="quickPick()">Play</button>
+    </div>
+  </div>
 </div>
 
 <!-- BALANCE PAGE -->
-<div id="moneyPage" class="hidden card">
+<div id="moneyPage" class="hidden">
   <div class="bigMoney" id="bigBalance">0$</div>
-  <button class="withdrawBtn" onclick="withdraw()">Withdraw</button>
+  <button onclick="withdraw()">Withdraw</button>
 </div>
 
 <!-- TERMS PAGE -->
-<div id="termsPage" class="hidden card">
+<div id="termsPage" class="hidden">
   <h2>Terms and Conditions</h2>
   <div class="termsText">
-    <p>Welcome to Cryzon. By using this website you accept these terms.</p>
-    <p>Cryzon is purely for entertainment. All virtual dollars displayed are fictional and cannot be redeemed for real money.</p>
-    <p>Games are based on simulated chance, rewards are virtual, and winnings are only for fun.</p>
-    <p>Users may play multiple mini-games including Slot Machine, Dice Roll, Lucky Wheel, Coin Flip, Pick a Number, High or Low, Card Guess, Number Race, Quick Pick, and Double Roll.</p>
-    <p>The platform does not provide real gambling, betting, or financial services.</p>
-    <p>The developers are not responsible for misunderstandings regarding the virtual currency system.</p>
-    <p>By using Cryzon, you understand that all currency is virtual and has no monetary value.</p>
-    <p class="virtualNote">All virtual currency on Cryzon has no real-world value.</p>
+    <p>All virtual dollars are fictional and cannot be redeemed for real money.</p>
+    <p class="virtualNote">All virtual currency has no real-world value.</p>
   </div>
 </div>
 
 <script>
-// ---------------- VARIABLES ----------------
 let balance = 0;
 
-// ---------------- MENU ----------------
 function toggleMenu(){
   let menu=document.getElementById("sidebar");
-  menu.style.left = menu.style.left === "0px" ? "-280px" : "0px";
+  menu.style.left = menu.style.left === "0px" ? "-250px" : "0px";
 }
 
-// ---------------- CREATE ACCOUNT ----------------
 function createAccount(){
   let code=document.getElementById("bonus").value;
   if(code==="Bonus2000"){balance+=2000;}
-  localStorage.setItem('cryzonBalance',balance);
   hideAll();
   document.getElementById("games").classList.remove("hidden");
   updateBalance();
 }
 
-// ---------------- SHOW/HIDE PAGES ----------------
 function hideAll(){
   document.getElementById("signup").classList.add("hidden");
   document.getElementById("games").classList.add("hidden");
@@ -183,31 +179,19 @@ function showHome(){hideAll();document.getElementById("games").classList.remove(
 function showMoney(){hideAll();document.getElementById("moneyPage").classList.remove("hidden");}
 function showTerms(){hideAll();document.getElementById("termsPage").classList.remove("hidden");}
 
-// ---------------- UPDATE BALANCE ----------------
 function updateBalance(){
   document.getElementById("balance").innerText = balance+"$";
   document.getElementById("bigBalance").innerText = balance+"$";
   let box=document.getElementById("balanceBox");
   box.classList.add("winAnim");
   setTimeout(()=>{box.classList.remove("winAnim");},400);
-  localStorage.setItem('cryzonBalance',balance);
 }
 
-// ---------------- WITHDRAW ----------------
+// WITHDRAW
 function withdraw(){window.location.href="https://forms.gle/zLBkGZr681Nt4jAr7";}
 
-// ---------------- MINI GAMES (ALWAYS WIN) ----------------
-function startSlot(){
-  let symbols=["★","☆","◆","◇","■"];
-  let result=symbols[Math.floor(Math.random()*symbols.length)]+
-             symbols[Math.floor(Math.random()*symbols.length)]+
-             symbols[Math.floor(Math.random()*symbols.length)];
-  let reward=Math.floor(Math.random()*200)+50;
-  balance+=reward;
-  alert("Slot Result: "+result+" → +"+reward+"$");
-  updateBalance();
-}
-
+// MINI GAMES
+function slotGame(){let r=Math.floor(Math.random()*200)+50; balance+=r; alert("You won "+r+"$"); updateBalance();}
 function diceGame(){let r=Math.floor(Math.random()*6+1)*40; balance+=r; alert("Dice rolled → +"+r+"$"); updateBalance();}
 function wheelGame(){let rewards=[50,100,150,200,300,500]; let r=rewards[Math.floor(Math.random()*rewards.length)]; balance+=r; alert("Wheel reward → +"+r+"$"); updateBalance();}
 function coinFlip(){let r=Math.floor(Math.random()*2)?100:50; balance+=r; alert("Coin Flip → +"+r+"$"); updateBalance();}
@@ -216,12 +200,10 @@ function highLowGame(){let num=Math.floor(Math.random()*10)+1; let guess=Math.fl
 function cardGuess(){let cards=["Red","Black"]; let pick=cards[Math.floor(Math.random()*2)]; let r=(pick==="Red"?150:100); balance+=r; alert("Card picked: "+pick+" → +"+r+"$"); updateBalance();}
 function numberRace(){let r=Math.floor(Math.random()*300)+50; balance+=r; alert("Number Race → +"+r+"$"); updateBalance();}
 function quickPick(){let r=Math.floor(Math.random()*250)+50; balance+=r; alert("Quick Pick → +"+r+"$"); updateBalance();}
-function doubleRoll(){let r=Math.floor(Math.random()*200)+100; balance+=r; alert("Double Roll → +"+r+"$"); updateBalance();}
 
-// ---------------- LOAD BALANCE ----------------
-window.onload=()=>{
-  if(localStorage.getItem('cryzonBalance')){balance=parseInt(localStorage.getItem('cryzonBalance'));}
+window.onload = ()=>{
   updateBalance();
+  document.getElementById("signup").classList.remove("hidden");
 };
 </script>
 </body>
